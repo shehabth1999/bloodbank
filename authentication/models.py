@@ -37,6 +37,8 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     blood_type = models.ForeignKey(BloodType, on_delete=models.CASCADE, null=True, blank=True)  
     name = models.CharField(max_length=150)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
@@ -48,3 +50,9 @@ class BaseUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+    def image_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+        else:
+            return None

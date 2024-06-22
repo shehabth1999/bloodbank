@@ -27,3 +27,15 @@ class DonationRequest(models.Model):
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     blood_type = models.ForeignKey(BloodType, on_delete=models.CASCADE)
     user = models.ForeignKey(BaseUser, on_delete=models.CASCADE)
+    is_done = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.hospital.name} - {self.blood_type.type}: {self.user.name}'
+    
+
+    def get_state(self):
+        if self.is_done:
+            return "Done"
+        else:
+            return "Pending"

@@ -130,6 +130,7 @@
     {% for hos in hospitals %}
         <div class="col-lg-6">
           <button class="popupBtn" 
+                  data-id="{{ hos.id }}"
                   data-name="{{ hos.hospital.name }}"
                   data-phone="{{ hos.hospital.phone }}"
                   data-map="{{ hos.hospital.map_url }}">
@@ -148,16 +149,17 @@
   <div class="popup-content">
       <span class="close" id="closeBtn">&times;</span>
       <p id="popup-name" style="font-size: 24px;"></p>
-      <h6><span style="color: #00adf1; font-size: 16px; margin-right: 10px; font-weight: 500;">Phone number:</span> <span id="popup-phone"></span></h6>
+      <h6><span style="color: #DA2653; font-size: 16px; margin-right: 10px; font-weight: 500;">Phone number:</span> <span id="popup-phone"></span></h6>
       <iframe id="popup-map" width="600" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      <!-- <div class="row">
+      <div class="row">
         <div class="col-lg-6">
-          <button style="background-color: green;" class="btn btn-success">DONATE</button>
+          <form method="post" action="{% url 'post_inventory' %}">
+            {% csrf_token %}
+            <input type="hidden" name="inventory_id" id="inventory_id" value="">
+            <button type="submit" class="btn btn-success">Request DONATE</button>
+          </form>
         </div>
-        <div class="col-lg-6">
-          <button style="background-color: red;" class="btn btn-success">REQUEST</button>
-        </div>
-      </div> -->
+      </div>
   </div>
 </div>
 
@@ -167,10 +169,11 @@
   var closeBtn = document.getElementById("closeBtn");
 
   // Function to open the popup with dynamic content
-  function openPopup(name, phone, mapUrl) {
+  function openPopup(name, phone, mapUrl, inventoryId) {
       document.getElementById("popup-name").textContent = name;
       document.getElementById("popup-phone").textContent = phone;
       document.getElementById("popup-map").src = mapUrl;
+      document.getElementById("inventory_id").value = inventoryId;
       popup.style.display = "block";
   }
 
@@ -192,10 +195,12 @@
           var name = this.getAttribute("data-name");
           var phone = this.getAttribute("data-phone");
           var mapUrl = this.getAttribute("data-map");
-          openPopup(name, phone, mapUrl);
+          var inventoryId = this.getAttribute("data-id");
+          openPopup(name, phone, mapUrl, inventoryId);
       });
   });
 </script>
+
 <script>
   document.getElementById('donation-form').addEventListener('submit', function(event) {
       var bloodType = document.getElementById('blood_type').value;

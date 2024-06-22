@@ -30,9 +30,12 @@ urlpatterns = [
 
     path('about-us/', about, name='about-us'),
     path('contact-us/', contact, name='contact-us'),
-    path('reaserches/', reaserches, name='reaserches'),
+    path('informations/', reaserches, name='reaserches'),
 ]
 
 # Serve static files during development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)    
